@@ -10,6 +10,7 @@
             },
             "Action": "s3:GetObject",
             "Resource": [
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/*",
                 "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/*",
                 "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/js/*",
                 "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/images/*",
