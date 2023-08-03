@@ -1,0 +1,38 @@
+{
+    "Version": "2008-10-17",
+    "Id": "PolicyForCloudFrontPrivateContent",
+    "Statement": [
+        {
+            "Sid": "AllowCloudFrontServicePrincipal",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "cloudfront.amazonaws.com"
+            },
+            "Action": "s3:GetObject",
+            "Resource": [
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/js/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/images/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/images/portfolio/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/images/portfolio/modals/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/css/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/css/font-awesome/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/css/font-awesome/css/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/css/font-awesome/fonts/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/css/font-awesome/less/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/css/font-awesome/scss/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/css/fontello/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/css/fontello/css/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/css/fontello/font/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/css/fonts/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/css/fonts/librebaskerville/*",
+                "arn:aws:s3:::cloud-challenge-jtarsi2023/resume/css/fonts/opensans/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "AWS:SourceArn": "arn:aws:cloudfront::807088505836:distribution/E133G2FRZVVY4Q"
+                }
+            }
+        }
+    ]
+}
