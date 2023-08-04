@@ -22,7 +22,7 @@ Repository containing all the source code, personal notes, diagrams related to t
 
 ## Application architecture
 
-![System architecture diagram of how this project is deployed in AWS.](/docs/architecture_diagram.png)
+![System architecture diagram of how this project is deployed in AWS.](/docs/architecture-diagram.png)
 
 
 ## Deployment pipeline
