@@ -131,7 +131,7 @@
     font-family: 'librebaskerville-regular';
     src: url('/resume/css/fonts/librebaskerville/librebaskerville-regular-webfont.eot');
     src: url('/resume/css/fonts/librebaskerville/librebaskerville-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/resume/css/css/fonts/librebaskerville/librebaskerville-regular-webfont.woff') format('woff'),
+         url('/resume/css/fonts/librebaskerville/librebaskerville-regular-webfont.woff') format('woff'),
          url('/resume/css/fonts/librebaskerville/librebaskerville-regular-webfont.ttf') format('truetype'),
          url('/resume/css/fonts/librebaskerville/librebaskerville-regular-webfont.svg#libre_baskervilleregular') format('svg');
     font-weight: normal;
