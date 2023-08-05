@@ -52,9 +52,9 @@ Amazon DynamoDB was configured with a single table containing a record represent
 
 ### AWS IAM Configuration
 
-AWS Identity and Access Management was used to create IAM roles allowing my Lambda function to access DynamoDB, as well as creating a programmatic access user with roles allowing updating of my infrastructure and content. This allows me to utilize GitHub Actions to create a CI/CD pipeline for automated updating of my infrastructure and website content. You can view my GitHub Action [here](/docs/cicd.yaml).
+AWS Identity and Access Management was used to create IAM roles allowing my Lambda function to access DynamoDB, as well as creating a programmatic access user with roles allowing updating of my infrastructure and content. This allows me to utilize GitHub Actions to create a CI/CD pipeline for automated updating of my infrastructure and website content. 
 
 
 ## Deployment pipeline
 
-This project is built using GitHub Actions, which syncs the website to S3 and performs a CloudFront invalidation when a change is pushed to the main branch.
+This project is built using GitHub Actions, which syncs the website to S3 and performs a CloudFront invalidation when a change is pushed to the main branch. You can view my GitHub Action [here](/docs/cicd.yaml).
