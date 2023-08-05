@@ -18,6 +18,7 @@ Repository containing all the source code, personal notes, diagrams related to t
   - Git: Tracking changes
 - Deployment:
   - GitHub Actions: Automating the deployment process.
+  - AWS SAM: Programmatic deployment of resources for the project.
 
 
 ## Application architecture
@@ -44,7 +45,7 @@ A RESTful API gateway was created enabling JavaScript from the website to trigge
 
 ### AWS Lambda Configuration
 
-An AWS Lambda function was written in Python to retrieve the current visitor count from DynamoDB, increment it by one, return the new value to the website, and write the new value back to DynamoDB. This allows the visitor counter to increment each time someone visits my website. An IAM role was created and assigned to my Lambda function allowing access to DynamoDB for this purpose
+An AWS Lambda function was written in Python to retrieve the current visitor count from DynamoDB, increment it by one, return the new value to the website, and write the new value back to DynamoDB. This allows the visitor counter to increment each time someone visits my website. An IAM role was created and assigned to my Lambda function allowing access to DynamoDB for this purpose. You can view my Lambda function [here](/docs/visitor-function.py).
 
 ### Amazon DynamoDB Configuration
 
@@ -54,7 +55,11 @@ Amazon DynamoDB was configured with a single table containing a record represent
 
 AWS Identity and Access Management was used to create IAM roles allowing my Lambda function to access DynamoDB, as well as creating a programmatic access user with roles allowing updating of my infrastructure and content. This allows me to utilize GitHub Actions to create a CI/CD pipeline for automated updating of my infrastructure and website content. 
 
+### AWS SAM Configuration
+
+AWS Serverless Application Model was used to programmatically deploy resources for this project.  You can view my SAM template [here](/docs/template.yaml).
+
 
 ## Deployment pipeline
 
-This project is built using GitHub Actions, which syncs the website to S3 and performs a CloudFront invalidation when a change is pushed to the main branch. You can view my GitHub Action [here](/docs/cicd.yaml).
+The frontend of my website is deployed using GitHub Actions, which syncs the website to S3 and performs a CloudFront invalidation when a change is pushed to the main branch. You can view my GitHub Action [here](/docs/cicd.yaml).

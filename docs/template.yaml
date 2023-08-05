@@ -1,0 +1,160 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  cloud-resume-challenge
+
+  Sample SAM Template for cloud-resume-challenge
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+
+  MyWebsite:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      AccessControl: Private
+      BucketName: <<S3_Bucket_Name>>
+
+  BucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref MyWebsite
+      PolicyDocument:
+        Id: WebPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal:
+              Service: "cloudfront.amazonaws.com"
+            Action: "s3:GetObject"
+            Resource: 
+              - !Sub arn:aws:s3:::${MyWebsite}/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/js/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/images/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/images/portfolio/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/images/portfolio/modals/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/css/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/css/font-awesome/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/css/font-awesome/css/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/css/font-awesome/fonts/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/css/font-awesome/less/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/css/font-awesome/scss/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/css/fontello/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/css/fontello/css/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/css/fontello/font/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/css/fonts/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/css/fonts/librebaskerville/*
+              - !Sub arn:aws:s3:::${MyWebsite}/resume/css/fonts/opensans/*
+            Condition:
+              StringEquals: 
+                AWS:SourceArn: arn:aws:cloudfront::<<ACCOUNT_NR>>:distribution/<<CloudFront Distribution ID>>
+
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: "Serverless website in S3"
+
+  MyRoute53Record:
+    Type: "AWS::Route53::RecordSetGroup"
+    Properties:
+      HostedZoneId: <<Route 53 Hosted Zone ID>>
+      RecordSets:
+        - Name: www.jasontarsi.com
+          Type: A
+          AliasTarget:
+            HostedZoneId: <<CLOUDFRONT_ID>>
+            DNSName: !GetAtt MyDistribution.DomainName
+        - Name: jasontarsi.com
+          Type: A
+          AliasTarget:
+            HostedZoneId: <<CLOUDFRONT_ID>>
+            DNSName: !GetAtt MyDistribution.DomainName
+
+
+  MyDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        ViewerCertificate:
+          AcmCertificateArn: arn:aws:acm:us-east-1:<<ACCOUNT_NR>>:certificate/<<CERT_NR>>
+          SslSupportMethod: sni-only
+        Aliases:
+          - www.jasontarsi.com
+          - jasontarsi.com
+        DefaultCacheBehavior:
+          Compress: 'true'
+          ViewerProtocolPolicy: redirect-to-https
+          TargetOriginId: s3-website
+          DefaultTTL: 30
+          MinTTL: 1
+          MaxTTL: 86400
+          ForwardedValues:
+            QueryString: false
+        PriceClass: PriceClass_100
+        Origins:
+          - DomainName: !GetAtt MyWebsite.DomainName
+            Id: s3-website
+            S3OriginConfig: {}
+            OriginAccessControlID: !Ref MyOriginAccessControl
+        Enabled: "true"
+        DefaultRootObject: resume/index.html
+        HttpVersion: http2
+
+
+MyOriginAccessControl:
+  Type: AWS::CloudFront::OriginAccessControl
+  Properties: 
+    OriginAccessControlConfig: 
+        Name: <<S#_Bucket_name>>.s3.us-east-1.amazonaws.com
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  GetCountFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: cloud-resume-challenge
+      CodeUri: docs/visitor-function.py
+      Handler: app.lambda_handler
+      Runtime: python3.11
+      Architectures:
+        - x86_64
+      Events:
+        HelloWorld:
+          Type: Api 
+          Properties:
+            Path: /get
+            Method: get
+
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: visitor-counter
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: "record-id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "ID"
+          KeyType: "HASH"
+
+Outputs:
+  HelloWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for GetCountFunction function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  GetCountFunction:
+    Description: "GetCountFunction Lambda Function ARN"
+    Value: !GetAtt GetCountFunction.Arn
+  GetCountFunctionIamRole:
+    Description: "Implicit IAM Role created for GetCountFunction"
+    Value: !GetAtt GetCountFunctionRole.Arn
+  MyDistribution:
+    Description: "CloudFront distribution domain name"
+    Value: !GetAtt MyDistribution.DomainName
