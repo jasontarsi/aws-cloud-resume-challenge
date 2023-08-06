@@ -62,4 +62,4 @@ AWS Serverless Application Model was used to programmatically deploy resources f
 
 ## Deployment pipeline
 
-The frontend of my website is deployed using GitHub Actions, which syncs the website to S3 and performs a CloudFront invalidation when a change is pushed to the main branch. You can view my GitHub Action [here](/docs/cicd.yaml).
+The frontend of my website is deployed using GitHub Actions, which syncs the website to S3 and performs a CloudFront invalidation when a change is pushed to the 'master' branch. You can view my GitHub Action [here](/docs/cicd.yaml). As you can see below, the Github Action allows me to quickly update my website content after a commit is pushed to my code.
