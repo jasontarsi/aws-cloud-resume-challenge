@@ -326,13 +326,13 @@ ul#nav li.current a { color: #F06000; }
 }
 
 .problemsolving {
-  	width: 90%;
+  	width: 95%;
    animation: problemsolving 2s ease;
    -moz-animation: problemsolving 2s ease;
   	-webkit-animation: problemsolving 2s ease;
 }
 .technicalinnovation {
-  	width: 75%;
+  	width: 80%;
    animation: problemsolving 2s ease;
   	-moz-animation: technicalinnovation 2s ease;
   	-webkit-animation: technicalinnovation 2s ease;
